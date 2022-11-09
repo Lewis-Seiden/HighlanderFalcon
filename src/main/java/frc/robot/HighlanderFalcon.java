@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import edu.wpi.first.math.controller.PIDController;
 
 /** A talonfx wrapper. Lazy talon functionality is taken from 254 */
 public class HighlanderFalcon extends TalonFX {
@@ -23,8 +26,21 @@ public class HighlanderFalcon extends TalonFX {
         super(id, canbus);
     }
 
-     /**Gets the last value sent to the motor */
-     public double getLastSet() {
+    /**Makes a new HighlanderFalcon with a PID controller built in */
+    public HighlanderFalcon(int id, PIDController pid) {
+        super(id);
+        this.config_kP(0, pid.getP());
+        this.config_kI(0, pid.getI());
+        this.config_kD(0, pid.getD());
+    }
+
+    public void defaultConfigs() {
+        this.enableVoltageCompensation(true);
+        this.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 80, 0.5));
+    }
+
+    /**Gets the last value sent to the motor */
+    public double getLastSet() {
         return lastSet;
     }
 
