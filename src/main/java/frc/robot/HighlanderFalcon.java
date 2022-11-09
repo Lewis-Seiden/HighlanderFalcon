@@ -43,23 +43,48 @@ public class HighlanderFalcon extends TalonFX {
         return super.getSelectedSensorPosition() * TICKS_TO_ROTATIONS;
     }
 
+    /**Gets the encoder position in degrees */
     public double getDegrees() {
         return getRotations() * 360;
     }
 
+    /**Gets the encoder position in radians */
     public double getRadians() {
         return getRotations() * Math.PI * 2;
     }
 
+    /**Gets the encoder RPM */
     public double getRPM() {
         return super.getSelectedSensorVelocity() * 10 * 60;
     }
 
+    /**Gets the encoder rotations per second */
     public double getRPS() {
         return getRPM() / 10;
     }
 
-    public void setRPM(double rpm) {
+    /**Sets the onboard velocity PID */
+    public void setTargetRPM(double rpm) {
         set(TalonFXControlMode.Velocity, rpm * ROTATIONS_TO_TICKS * 60 * 10);
+    }
+
+    /**Sets the onboard position PID, in rotations */
+    public void setTargetRot(double rotations) {
+        set(TalonFXControlMode.Position, rotations * ROTATIONS_TO_TICKS);
+    }
+
+    /**Sets the onboard position PID, in degrees */
+    public void setTargetDegrees(double degrees) {
+        setTargetRot(degrees / 360);
+    }
+
+    /**Sets the onboard position PID, in radians */
+    public void setTargetRadians(double radians) {
+        setTargetRot(radians / (Math.PI * 2));
+    }
+
+    /**Sets the output of the motor from -1 to 1*/
+    public void setPercentOut(double percent) {
+        set(TalonFXControlMode.PercentOutput, percent);
     }
 }
